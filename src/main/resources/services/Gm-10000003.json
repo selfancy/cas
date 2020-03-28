@@ -1,0 +1,9 @@
+{
+  "@class" : "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId" : "^http://localhost:8080/game_manager/shiro-cas",
+  "name" : "game_manager",
+  "theme" : "apereo",
+  "id" : 10000003,
+  "description" : "game_manager service",
+  "evaluationOrder" : 1
+}
