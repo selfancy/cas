@@ -1,0 +1,9 @@
+{
+  "@class" : "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId" : "^(https|imaps|http)://localhost:8081/game_manager*",
+  "name" : "game_manager_pro",
+  "theme" : "game_manager_pro",
+  "id" : 102,
+  "description" : "game_manager_pro service",
+  "evaluationOrder" : 1
+}

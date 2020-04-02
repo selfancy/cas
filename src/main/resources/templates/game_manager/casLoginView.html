@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh_cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title th:text="#{cas.login.pagetitle}">登录－管理后台</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/themes/game_manager/css/login.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-1.9.1.min.js}"></script>
+    <script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
+    <script language="javascript">
+        if (top != window)
+            top.location.href = window.location.href;
+    </script>
+</head>
+
+<body>
+<div id="login">
+    <h1>Login</h1>
+    <form th:action="login" th:object="${credential}" method="post" id="form">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <span style="color: #BB0000" th:each="err : ${#fields.errors('*')}" th:utext="${err}">Example error</span>
+        </div>
+        <table>
+            <input type="hidden" required="required"  name="nailUserId" id="nailUserId">
+            <input type="hidden" name="execution" th:value="${flowExecutionKey}" />
+            <input type="hidden" name="_eventId" value="submit" />
+            <input type="hidden" name="geolocation" />
+            <tr>
+                <td colspan="2">
+                    <input type="text" required="required" placeholder="用户名" name="username" id="username" autocomplete="off"
+                           th:disabled="${guaEnabled}"
+                           th:field="*{username}"
+                           th:accesskey="#{screen.welcome.label.netid.accesskey}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="password" required="required" placeholder="密码" name="password" id="password" autocomplete="off"
+                           th:field="*{password}"
+                           th:accesskey="#{screen.welcome.label.password.accesskey}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="but" id="login_btn" type="submit"
+                            th:unless="${recaptchaSiteKey != null AND recaptchaInvisible != null AND recaptchaSiteKey != null AND recaptchaInvisible}"
+                            accesskey="l">登录</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script th:inline="javascript">
+    if (dd.env.platform!=="notInDingTalk") {
+        dd.ready(function () {
+            // dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
+            dd.runtime.permission.requestAuthCode({
+                corpId: "ding4b68b1aefa3c4b8235c2f4657eb6378f",
+                onSuccess: function (result) {
+                    $.ajax({
+                            url: /*[[@{/loginCode}]]*/'loginCode',
+                            method: "post",
+                            data: {code: result.code},
+                            success: function (result) {
+                                if (result.code === 0) {
+                                    if (result.list.username != null && result.list.password != null && result.list.nailUserId != null) {
+                                        $("#nailUserId").val(result.list.nailUserId);
+                                        document.getElementById("form").submit();
+                                    } else {
+                                        //为空更新用户钉钉用户id
+                                        $("#nailUserId").val(result.list.nailUserId);
+                                    }
+                                } else {
+                                    layer.alert(result.msg, {icon: 2});
+                                }
+                            },
+                            onFail: function (err) {
+                                alert('fail: ' + JSON.stringify(err));
+                            }
+                        }
+                    )
+
+                }
+
+            });
+        });
+    }
+
+    $(document).ready(function() {
+        var i = [[#{screen.welcome.button.loginwip}]]
+        $("#form").submit(function () {
+            $(":submit").attr("disabled", true);
+            $(":submit").attr("value", i);
+            console.log(i);
+            return true;
+        });
+    });
+</script>
+</body>
+</html>

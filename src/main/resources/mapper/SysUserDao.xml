@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haofei.cas.dao.SysUserDao">
+    <resultMap id="BaseResultMap" type="com.haofei.cas.entity.SysUser">
+        <id column="user_id" property="userId" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="mobile" property="mobile" />
+        <result column="expired" property="expired" />
+        <result column="disabled" property="disabled" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <sql id="BaseColumns">
+        user_id, username, password, mobile, expired, disabled, created_time, updated_time
+    </sql>
+
+    <insert id="save" parameterType="com.haofei.cas.entity.SysUser">
+        INSERT INTO sys_user (username, password, mobile, expired, disabled, created_time, updated_time)
+        VALUES (#{username}, #{password}, #{mobile}, #{expired}, #{disabled}, #{created_time}, #{updated_time})
+    </insert>
+
+    <update id="update" parameterType="com.haofei.cas.entity.SysUser">
+        UPDATE sys_user
+        <set>
+            <if test="username != null">username=#{username},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="mobile != null">mobile=#{mobile},</if>
+            <if test="expired != null">expired=#{expired},</if>
+            <if test="disabled != null">disabled=#{disabled},</if>
+            <if test="updatedTime != null">updated_time=#{updatedTime}</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_user WHERE user_id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_user
+    </select>
+
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_user WHERE username = #{username}
+    </select>
+</mapper>

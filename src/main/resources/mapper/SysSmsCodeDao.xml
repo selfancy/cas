@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haofei.cas.dao.SysSmsCodeDao">
+    <resultMap id="BaseResultMap" type="com.haofei.cas.entity.SysSmsCode">
+        <id column="pid" property="pid" />
+        <result column="revision" property="revision" />
+        <result column="mobile" property="mobile" />
+        <result column="sms_code" property="smsCode" />
+        <result column="op_type" property="opType" />
+        <result column="status" property="status" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <sql id="BaseColumns">
+        pid, revision, mobile, sms_code, op_type, status, created_time, updated_time
+    </sql>
+
+    <insert id="save" parameterType="com.haofei.cas.entity.SysSmsCode">
+        INSERT INTO sys_sms_code (revision, mobile, sms_code, op_type, status, created_time, updated_time)
+        VALUES (#{revision}, #{mobile}, #{smsCode}, #{opType}, #{status}, #{createdTime}, #{updatedTime})
+    </insert>
+
+    <update id="update" parameterType="com.haofei.cas.entity.SysSmsCode">
+        UPDATE sys_sms_code
+        <set>
+            <if test="revision != null">revision=#{revision},</if>
+            <if test="mobile != null">mobile=#{mobile},</if>
+            <if test="smsCode != null">sms_code=#{smsCode},</if>
+            <if test="opType != null">op_type=#{opType},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="updatedTime != null">updated_time=#{updatedTime}</if>
+        </set>
+        WHERE pid = #{pid}
+    </update>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_sms_code WHERE pid = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_sms_code
+    </select>
+
+    <select id="getSysSmsCodeBy" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumns"/> FROM sys_sms_code
+        WHERE mobile = #{mobile} AND op_type = #{opType}
+    </select>
+</mapper>
