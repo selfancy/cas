@@ -17,7 +17,7 @@
         <start-class>org.apereo.cas.CasServerApplication</start-class>
         <spring-boot.version>1.5.18.RELEASE</spring-boot.version>
         <tomcat.version>8.5.35</tomcat.version>
-        <cas-server.version>5.3.14</cas-server.version>
+        <cas-server.version>6.4.2</cas-server.version>
     </properties>
 
     <dependencyManagement>
